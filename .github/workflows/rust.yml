@@ -1,0 +1,24 @@
+
+name: Rust CI
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Build
+              shell: bash
+              run: |
+                cargo build --release
+
+            - name: Benchmark each
+              shell: bash
+              run: |
+                make benchmark_each
+
