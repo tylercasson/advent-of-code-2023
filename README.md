@@ -1,4 +1,4 @@
-# Advent of Code 2023 Solutions in Rust
+# A Rusty Advent of Code 2023
 
 ## Overview
 
