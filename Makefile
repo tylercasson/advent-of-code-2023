@@ -27,7 +27,7 @@ clean_all:
 	done
 
 benchmark: build_release
-	perf stat -r 10 ./target/release/advent_of_code_2023 1>/dev/null
+	perf stat -r 10 ./target/release/advent-of-code-2023 1>/dev/null
 
 benchmark_each: build_release
 	for dir in $(SUBDIRS); do \
