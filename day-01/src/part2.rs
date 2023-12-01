@@ -115,7 +115,7 @@ pub fn extract_number_word(input: &str, direction: Direction) -> Option<NumberRe
 
     if let Direction::RTL = direction {
         test_input = reverse(test_input);
-        index_correction = input.len() - 1;
+        index_correction = input.len();
     }
 
     while offset < test_input.len() {
@@ -129,7 +129,7 @@ pub fn extract_number_word(input: &str, direction: Direction) -> Option<NumberRe
             if curr == test_word {
                 let mut index = offset;
                 if let Direction::RTL = direction {
-                    index = index_correction - index - word.len() + 1;
+                    index = index_correction - index - word.len();
                 }
                 return Some(NumberResult::new(index, value));
             }
