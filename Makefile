@@ -1,19 +1,30 @@
 
-SUBDIRS := $(shell ls | grep '^day_')
+SUBDIRS := $(shell ls | grep '^day-')
 
 default: build_release
+
+benchmark: build_release
+	perf stat -r 10 ./target/release/advent-of-code-2023 1>/dev/null
+
+benchmark_each: build_release
+	for dir in $(SUBDIRS); do \
+		echo "\nRunning $$dir"; \
+		cd $$dir; \
+		cargo build --release; \
+		perf stat -r 10 ./target/release/$$dir 1>/dev/null; \
+		/usr/bin/time ./target/release/$$dir 1>/dev/null; \
+		perf stat -r 10 ./target/release/part1 1>/dev/null; \
+		/usr/bin/time ./target/release/part1 1>/dev/null; \
+		perf stat -r 10 ./target/release/part2 1>/dev/null; \
+		/usr/bin/time ./target/release/part2 1>/dev/null; \
+		cd ..; \
+	done
 
 build:
 	cargo build
 
 build_release:
 	cargo build --release
-
-run:
-	cargo run
-
-run_release:
-	cargo run --release
 
 clean:
 	cargo clean
@@ -26,15 +37,11 @@ clean_all:
 		cd ..; \
 	done
 
-benchmark: build_release
-	perf stat -r 10 ./target/release/advent-of-code-2023 1>/dev/null
+generate:
+	cargo generate --path cargo-template-day
 
-benchmark_each: build_release
-	for dir in $(SUBDIRS); do \
-		echo "\nRunning $$dir"; \
-		cd $$dir; \
-		cargo build --release; \
-		perf stat -r 10 ./target/release/$$dir 1>/dev/null; \
-		/usr/bin/time ./target/release/$$dir 1>/dev/null; \
-		cd ..; \
-	done
+run:
+	cargo run
+
+run_release:
+	cargo run --release
