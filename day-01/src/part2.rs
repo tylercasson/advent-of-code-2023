@@ -203,7 +203,6 @@ pub fn run(input: &str) -> Result<String, Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
-
     use super::{
         extract_number_literal, extract_number_pair, extract_number_word, run, Direction,
         NumberResult,
