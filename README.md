@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains my solutions for the [Advent of Code 2023](https://adventofcode.com/2023) challenges, implemented in [Rust](https://www.rust-lang.org/).
+This repository contains my solutions for the [Advent of Code 2023](https://adventofcode.com/2023) challenges, implemented in [Rust](https://www.rust-lang.org/). I'm still learning the language, so things might be a little messy for a while.
 
 ## Structure
 
