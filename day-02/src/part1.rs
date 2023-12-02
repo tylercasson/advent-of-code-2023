@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::error::Error;
 
 /**
@@ -97,7 +96,7 @@ pub fn run(input: &str) -> Result<u32, Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
 
-    use super::{run, Bag};
+    use super::run;
 
     #[test]
     fn part1_example_input() {
