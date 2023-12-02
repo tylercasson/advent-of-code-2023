@@ -42,7 +42,7 @@ Benchmarks can be run in each day's directory:
 
 ```bash
 cd day-01
-cargo bench --all-features
+cargo bench -q --all-features
 ```
 
 Additionally, all days can be benchmarked using the `benchmark_each` command in the [Makefile](Makefile):
