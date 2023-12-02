@@ -15,7 +15,7 @@ Each day's challenge is located in its own directory. The structure is as follow
 
 ## Generating a New Day
 
-A new day can be generated from the template in the `cargo-template-day` directory using [`cargo-generate`](https://github.com/cargo-generate/cargo-generate):
+A new day can be generated from the template in the `cargo-template-day` directory using [cargo-generate](https://github.com/cargo-generate/cargo-generate):
 
 ```bash
 cargo install cargo-generate # if not already installed
@@ -24,29 +24,29 @@ cargo generate --path cargo-template-day
 
 ## Running the Solutions
 
-To run a solution, navigate to the respective day's directory, build the project, and run the desired part:
+To run a solution, navigate to the respective day's directory and run the desired part:
 
 ```bash
 cd day-01
-cargo build --release
-./target/release/part1
-./target/release/part2
+cargo run --bin part1
+cargo run --bin part2
 ```
 
 ## Benchmarking
 
-I'm just using `perf` and `time` for basic CPU and memory measurement for now.
+Days generated using the included template will be bootstrapped with Divan benchmarking.
 
-> Note that on some shells, you need to use the absolute path to `time` to avoid using the shell's built-in `time` command.
+> Refer to the ["**Generating a New Day**"](#generating-a-new-day) section for more info.
+
+Benchmarks can be run in each day's directory:
 
 ```bash
-perf stat -r 10 ./target/release/part1 1>/dev/null
-/usr/bin/time ./target/release/part1 1>/dev/null
-
-perf stat -r 10 ./target/release/part2 1>/dev/null
-/usr/bin/time ./target/release/part2 1>/dev/null
+cd day-01
+cargo bench -q --all-features
 ```
 
-## License
+Additionally, all days can be benchmarked using the `benchmark_each` command in the [Makefile](Makefile):
 
-This project is open-sourced under the [MIT License](LICENSE).
+```bash
+make benchmark_each
+```
