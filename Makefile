@@ -4,13 +4,13 @@ SUBDIRS := $(shell ls | grep '^day-')
 default: build_release
 
 benchmark: build_release
-	cargo bench -q --all-features
+	cargo bench --all-features
 
 benchmark_each: build_release
 	for dir in $(SUBDIRS); do \
 		echo "\nRunning $$dir"; \
 		cd $$dir; \
-		cargo bench -q --all-features; \
+		cargo bench --all-features; \
 		cd ..; \
 	done
 
