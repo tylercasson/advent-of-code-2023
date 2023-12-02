@@ -65,7 +65,6 @@ impl Bag {
 }
 
 pub fn run(input: &str) -> Result<u32, Box<dyn Error>> {
-    dbg!("running");
     let real_bag = Bag::new(12, 13, 14);
 
     let sum: u32 = input
@@ -84,7 +83,6 @@ pub fn run(input: &str) -> Result<u32, Box<dyn Error>> {
             let game_details = game_parts.last().expect("should have game details");
 
             let bag = Bag::from(game_details);
-            dbg!(&bag);
 
             if bag.red <= real_bag.red && bag.green <= real_bag.green && bag.blue <= real_bag.blue {
                 return Some(game_id);
@@ -92,8 +90,6 @@ pub fn run(input: &str) -> Result<u32, Box<dyn Error>> {
             None
         })
         .sum();
-
-    dbg!(sum);
 
     Ok(sum)
 }
