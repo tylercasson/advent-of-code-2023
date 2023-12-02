@@ -34,7 +34,7 @@ cargo run --bin part2
 
 ## Benchmarking
 
-Days generated using the included template will be bootstrapped with Divan benchmarking.
+Days generated using the included template will be bootstrapped with [Criterion](https://github.com/bheisler/criterion.rs) and [Divan](https://github.com/nvzqz/divan) benchmarking.
 
 > Refer to the ["**Generating a New Day**"](#generating-a-new-day) section for more info.
 
