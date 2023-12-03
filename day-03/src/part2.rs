@@ -10,10 +10,6 @@ mod tests {
 
     #[test]
     fn part2_example_input() {
-        let input = "";
-
-        let expected = "".to_string();
-
-        assert_eq!(expected, run(input).expect("should return expected value"));
+        todo!("Test example input for part 2");
     }
 }
