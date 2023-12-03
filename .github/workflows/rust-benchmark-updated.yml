@@ -30,5 +30,9 @@ jobs:
       - name: Benchmark updated
         shell: bash
         run: |
+          git diff --name-only HEAD^ HEAD
+          git diff --name-only HEAD^ HEAD | grep '^day-[0-9]*'
+          git diff --name-only HEAD^ HEAD | grep '^day-[0-9]*' | awk -F '/' '{print $1}'
+          git diff --name-only HEAD^ HEAD | grep '^day-[0-9]*' | awk -F '/' '{print $1}' | uniq
           git diff --name-only HEAD^ HEAD | grep '^day-[0-9]*' | awk -F '/' '{print $1}' | uniq | xargs sh -c '[ "$#" -gt 0 ] && echo "$@ updated; bechmarking..." && cargo bench -q --all-features -p "$@"' sh
 
