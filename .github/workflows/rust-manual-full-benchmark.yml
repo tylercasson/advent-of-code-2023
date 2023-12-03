@@ -1,0 +1,30 @@
+name: Manual Full Benchmark
+
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build
+        shell: bash
+        run: |
+          cargo build --release
+
+      - name: Benchmark All
+        shell: bash
+        run: |
+          cargo bench -q --all-features
