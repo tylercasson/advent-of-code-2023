@@ -1,8 +1,14 @@
-[package]
+[workspace]
+members = ["day-[0-9]*"]
+resolver = "2"
+
+[workspace.package]
 name = "advent-of-code-2023"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies]
+[workspace.dependencies]
+criterion = "0.5.1"
+divan = "0.1.4"

@@ -28,8 +28,15 @@ To run a solution, navigate to the respective day's directory and run the desire
 
 ```bash
 cd day-01
-cargo run --bin part1
-cargo run --bin part2
+cargo run --bin day-01-part1
+cargo run --bin day-01-part2
+```
+
+Or from the workspace root:
+
+```bash
+cargo run --bin day-01-part1
+cargo run --bin day-01-part2
 ```
 
 ## Benchmarking
@@ -45,8 +52,8 @@ cd day-01
 cargo bench -q --all-features
 ```
 
-Additionally, all days can be benchmarked using the `benchmark_each` command in the [Makefile](Makefile):
+Additionally, all days can be benchmarked from the workspace root:
 
 ```bash
-make benchmark_each
+cargo bench -q --all-features
 ```
