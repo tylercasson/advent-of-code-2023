@@ -35,8 +35,6 @@ impl Card {
 
         card.calculate_points();
 
-        dbg!("{:?}", &card);
-
         card
     }
 
