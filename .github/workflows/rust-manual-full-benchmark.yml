@@ -1,7 +1,7 @@
-name: Rust CI
+name: Manual Full Benchmark
 
 on:
-  push:
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,3 +24,7 @@ jobs:
         run: |
           cargo build --release
 
+      - name: Benchmark All
+        shell: bash
+        run: |
+          cargo bench -q --all-features

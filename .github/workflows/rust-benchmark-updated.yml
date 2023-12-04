@@ -1,13 +1,16 @@
-name: Rust CI
+name: Benchmark Updated Directories in PR
 
 on:
   push:
+  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - uses: actions/cache@v3
         with:
@@ -23,4 +26,10 @@ jobs:
         shell: bash
         run: |
           cargo build --release
+
+      - name: Benchmark updated
+        shell: bash
+        continue-on-error: true
+        run: |
+          git diff --name-only HEAD^ HEAD | grep '^day-[0-9]*' | awk -F '/' '{print $1}' | uniq | xargs cargo bench -q --all-features -p
 
