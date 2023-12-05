@@ -20,3 +20,4 @@ criterion = { workspace = true }
 divan = { workspace = true }
 
 [dependencies]
+rayon = { workspace = true }
