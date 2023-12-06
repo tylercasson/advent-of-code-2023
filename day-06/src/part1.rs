@@ -6,6 +6,22 @@ pub struct Race {
     dist: f32,
 }
 
+impl Race {
+    pub fn winning_options(&self) -> f32 {
+        // dist = time * x - x^2
+        let a = -1.0;
+        let b = self.time;
+        let c = -(self.dist + 1.0);
+        let disc = b * b - 4.0 * a * c;
+
+        let x1 = (-b + f32::sqrt(disc)) / (2.0 * a);
+        let x2 = (-b - f32::sqrt(disc)) / (2.0 * a);
+
+        // inclusive
+        x2.floor() - x1.ceil() + 1.0
+    }
+}
+
 pub fn run(input: &str) -> Result<String, Box<dyn Error>> {
     let mut lines = input.lines();
     let times: Vec<f32> = lines
@@ -28,22 +44,7 @@ pub fn run(input: &str) -> Result<String, Box<dyn Error>> {
         .map(|(time, dist)| Race { time, dist })
         .collect();
 
-    let options: f32 = races
-        .iter()
-        .map(|race| {
-            // dist = time * x - x^2
-            let a = -1.0;
-            let b = race.time;
-            let c = -(race.dist + 1.0);
-            let disc = b * b - 4.0 * a * c;
-
-            let x1 = (-b + f32::sqrt(disc)) / (2.0 * a);
-            let x2 = (-b - f32::sqrt(disc)) / (2.0 * a);
-
-            // inclusive
-            x2.floor() - x1.ceil() + 1.0
-        })
-        .product();
+    let options: f32 = races.iter().map(|race| race.winning_options()).product();
 
     Ok((options as u32).to_string())
 }
