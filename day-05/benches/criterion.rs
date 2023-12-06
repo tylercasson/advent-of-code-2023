@@ -21,5 +21,5 @@ pub fn part2(c: &mut Criterion) {
     group.finish();
 }
 
-criterion_group!(benches, part1, part2);
+criterion_group!(benches, part1);
 criterion_main!(benches);
