@@ -19,6 +19,11 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Test
+        shell: bash
+        run: |
+          cargo test
+
       - name: Build
         shell: bash
         run: |
