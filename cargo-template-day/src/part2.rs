@@ -9,7 +9,7 @@ mod tests {
     use super::run;
 
     #[test]
-    fn part2_example_input() {
+    fn example_input() {
         let input = "";
 
         let expected = "".to_string();
