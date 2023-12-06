@@ -1,7 +1,6 @@
 name: Benchmark Updated Directories in PR
 
 on:
-  push:
   pull_request:
 jobs:
   build:
