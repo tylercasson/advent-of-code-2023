@@ -64,7 +64,7 @@ impl Card {
 pub struct Hand {
     cards: Vec<Card>,
     bid: u32,
-    score: u32,
+    score: u8,
 }
 
 impl Hand {
@@ -89,6 +89,7 @@ impl Hand {
     }
 
     pub fn identity(&self) -> HandIdentity {
+        use HandIdentity::*;
         let mut map: BTreeMap<&str, u32> = BTreeMap::new();
 
         self.cards.iter().for_each(|card| {
@@ -100,34 +101,34 @@ impl Hand {
         values.reverse();
 
         let id = match *values {
-            [5] => HandIdentity::FiveOfAKind,
-            [4, 1] => HandIdentity::FourOfAKind,
-            [3, 2] => HandIdentity::FullHouse,
-            [3, 1, 1] => HandIdentity::ThreeOfAKind,
-            [2, 2, 1] => HandIdentity::TwoPair,
-            [2, 1, 1, 1] => HandIdentity::OnePair,
-            _ => HandIdentity::HighCard,
+            [5] => FiveOfAKind,
+            [4, 1] => FourOfAKind,
+            [3, 2] => FullHouse,
+            [3, 1, 1] => ThreeOfAKind,
+            [2, 2, 1] => TwoPair,
+            [2, 1, 1, 1] => OnePair,
+            _ => HighCard,
         };
 
         if let Some((_, count)) = map.iter().find(|(&k, _)| k == "J") {
             match id {
-                HandIdentity::FiveOfAKind => HandIdentity::FiveOfAKind,
-                HandIdentity::FourOfAKind => HandIdentity::FiveOfAKind,
+                FiveOfAKind => FiveOfAKind,
+                FourOfAKind => FiveOfAKind,
                 // JJJ22, JJ222
-                HandIdentity::FullHouse => HandIdentity::FiveOfAKind,
+                FullHouse => FiveOfAKind,
                 // JJJ23, JJ222, J2222
-                HandIdentity::ThreeOfAKind => match count {
-                    2 => HandIdentity::FiveOfAKind,
-                    _ => HandIdentity::FourOfAKind,
+                ThreeOfAKind => match count {
+                    2 => FiveOfAKind,
+                    _ => FourOfAKind,
                 },
                 // JJ223, J2233
-                HandIdentity::TwoPair => match count {
-                    2 => HandIdentity::FourOfAKind,
-                    _ => HandIdentity::FullHouse,
+                TwoPair => match count {
+                    2 => FourOfAKind,
+                    _ => FullHouse,
                 },
                 // JJ234, 22J34
-                HandIdentity::OnePair => HandIdentity::ThreeOfAKind,
-                HandIdentity::HighCard => HandIdentity::OnePair,
+                OnePair => ThreeOfAKind,
+                HighCard => OnePair,
             }
         } else {
             id
@@ -136,33 +137,19 @@ impl Hand {
 
     pub fn update_score(&mut self) {
         let id = self.identity();
-        self.score = id.value();
+        self.score = id as u8;
     }
 }
 
 #[derive(Debug)]
 pub enum HandIdentity {
-    FiveOfAKind,
-    FourOfAKind,
-    FullHouse,
-    ThreeOfAKind,
-    TwoPair,
-    OnePair,
-    HighCard,
-}
-
-impl HandIdentity {
-    pub fn value(&self) -> u32 {
-        match self {
-            HandIdentity::FiveOfAKind => 7,
-            HandIdentity::FourOfAKind => 6,
-            HandIdentity::FullHouse => 5,
-            HandIdentity::ThreeOfAKind => 4,
-            HandIdentity::TwoPair => 3,
-            HandIdentity::OnePair => 2,
-            HandIdentity::HighCard => 1,
-        }
-    }
+    FiveOfAKind = 7,
+    FourOfAKind = 6,
+    FullHouse = 5,
+    ThreeOfAKind = 4,
+    TwoPair = 3,
+    OnePair = 2,
+    HighCard = 1,
 }
 
 pub fn card_map() -> HashMap<String, u32> {

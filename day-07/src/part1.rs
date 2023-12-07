@@ -58,7 +58,7 @@ impl Card {
 pub struct Hand {
     cards: Vec<Card>,
     bid: u32,
-    score: u32,
+    score: u8,
 }
 
 impl Hand {
@@ -83,6 +83,7 @@ impl Hand {
     }
 
     pub fn identity(&self) -> HandIdentity {
+        use HandIdentity::*;
         let mut map: BTreeMap<&str, u32> = BTreeMap::new();
 
         self.cards.iter().for_each(|card| {
@@ -94,13 +95,13 @@ impl Hand {
         values.reverse();
 
         match *values {
-            [5] => HandIdentity::FiveOfAKind,
-            [4, 1] => HandIdentity::FourOfAKind,
-            [3, 2] => HandIdentity::FullHouse,
-            [3, ..] => HandIdentity::ThreeOfAKind,
-            [2, 2, 1] => HandIdentity::TwoPair,
-            [2, ..] => HandIdentity::OnePair,
-            _ => HandIdentity::HighCard,
+            [5] => FiveOfAKind,
+            [4, 1] => FourOfAKind,
+            [3, 2] => FullHouse,
+            [3, ..] => ThreeOfAKind,
+            [2, 2, 1] => TwoPair,
+            [2, ..] => OnePair,
+            _ => HighCard,
         }
     }
 
@@ -108,32 +109,18 @@ impl Hand {
         // search for five of a kind
         let id = self.identity();
 
-        self.score = id.value();
+        self.score = id as u8;
     }
 }
 
 pub enum HandIdentity {
-    FiveOfAKind,
-    FourOfAKind,
-    FullHouse,
-    ThreeOfAKind,
-    TwoPair,
-    OnePair,
-    HighCard,
-}
-
-impl HandIdentity {
-    pub fn value(&self) -> u32 {
-        match self {
-            HandIdentity::FiveOfAKind => 7,
-            HandIdentity::FourOfAKind => 6,
-            HandIdentity::FullHouse => 5,
-            HandIdentity::ThreeOfAKind => 4,
-            HandIdentity::TwoPair => 3,
-            HandIdentity::OnePair => 2,
-            HandIdentity::HighCard => 1,
-        }
-    }
+    FiveOfAKind = 7,
+    FourOfAKind = 6,
+    FullHouse = 5,
+    ThreeOfAKind = 4,
+    TwoPair = 3,
+    OnePair = 2,
+    HighCard = 1,
 }
 
 // pub fn card_map() -> Vec<Card> {
