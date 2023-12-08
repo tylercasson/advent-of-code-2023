@@ -12,4 +12,5 @@ edition = "2021"
 [workspace.dependencies]
 criterion = "0.5.1"
 divan = "0.1.4"
+num = "0.4.1"
 rayon = "1.8"
