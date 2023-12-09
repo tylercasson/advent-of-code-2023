@@ -1,5 +1,5 @@
 use num::integer::lcm;
-use std::collections::{HashMap, VecDeque};
+use std::collections::HashMap;
 use std::io::Result;
 
 const START_SUFFIX: char = 'A';
@@ -53,84 +53,69 @@ impl Node {
 ///
 pub fn run(input: &str) -> Result<String> {
     let mut lines = input.lines().filter(|line| !line.is_empty());
-    let original_moves: VecDeque<char> = lines
+    let moves: Vec<char> = lines
         .next()
         .expect("should have moves line")
         .chars()
         .collect();
 
-    let mut starts: Vec<Node> = vec![];
     let mut nodes: HashMap<String, Node> = HashMap::new();
 
     // add node records
-    lines.for_each(|line| {
+    let mut check_nodes: Vec<Node> = lines.fold(vec![], |mut acc, line| {
         let node = Node::from(line);
-        nodes.insert(node.value.clone(), node.clone());
+
         if node.kind == NodeKind::Start {
-            starts.push(node.clone());
+            acc.push(node.clone());
         }
+
+        nodes.insert(node.value.to_string(), node);
+
+        acc
     });
 
-    let mut step_count = 0;
-    let mut current_nodes: Vec<Node> = starts.clone();
-    let mut moves = original_moves.clone();
-    let mut end_depths: HashMap<String, u64> = HashMap::new();
+    let mut step_count: u64 = 0;
+    let mut end_depths: Vec<u64> = vec![];
 
     // loop until no more moves
-    'outer: while !moves.is_empty() {
-        step_count += 1;
-        let dir = moves.pop_front().unwrap();
-        let mut next_nodes: Vec<Node> = vec![];
-
-        current_nodes.iter().for_each(|node| {
-            let node = node.clone();
-
-            // find next nodes and update depth counters
-            match dir {
-                'L' => {
-                    let next_node = nodes.get(&node.left).unwrap().clone();
-                    let record = end_depths.entry(next_node.value.clone()).or_insert(0);
-                    *record = step_count;
-
-                    // add to next step if not an end node
-                    if next_node.kind != NodeKind::End {
-                        next_nodes.push(next_node);
-                    }
-                }
-                _ => {
-                    let next_node = nodes.get(&node.right).unwrap().clone();
-                    let record = end_depths.entry(next_node.value.clone()).or_insert(0);
-                    *record = step_count;
-
-                    // add to next step if not an end node
-                    if next_node.kind != NodeKind::End {
-                        next_nodes.push(next_node);
-                    }
-                }
-            };
-        });
-
-        // if all ends found at once, stop
-        if next_nodes.iter().all(|node| node.kind == NodeKind::End) {
+    'outer: loop {
+        // nothing left to check
+        if check_nodes.is_empty() {
             break 'outer;
         }
 
-        // repeat original move set
-        if moves.is_empty() {
-            moves = original_moves.clone();
+        let i = (step_count % moves.len() as u64) as usize;
+        let dir = moves.get(i).unwrap();
+        step_count += 1;
+
+        let mut next_nodes: Vec<Node> = vec![];
+
+        check_nodes.iter().for_each(|node| {
+            // find next nodes and update depth counters
+            let next_node = match dir {
+                'L' => nodes.get(&node.left).unwrap(),
+                _ => nodes.get(&node.right).unwrap(),
+            };
+
+            if next_node.kind == NodeKind::End {
+                // record depth for end node
+                end_depths.push(step_count);
+            } else {
+                // add to next step if not an end node
+                next_nodes.push(next_node.clone())
+            }
+        });
+
+        // nothing left to check
+        if next_nodes.is_empty() {
+            break 'outer;
         }
 
-        // update nodes to check
-        current_nodes = next_nodes.clone();
+        check_nodes = next_nodes;
     }
 
     // loop over, find least common multiple of end depths
-    let depths_lcm: u64 = end_depths
-        .iter()
-        .filter(|(step, _)| step.ends_with('Z'))
-        .map(|(_, &depth)| depth)
-        .reduce(lcm)
-        .unwrap();
+    let depths_lcm = end_depths.into_iter().reduce(lcm).unwrap();
 
     Ok(depths_lcm.to_string())
 }
