@@ -98,10 +98,33 @@ impl Maze {
             vec![Some((pipe, from.clone(), 0))];
 
         let mut steps: Vec<u32> = vec![];
+        let mut max_steps: u32 = 0;
 
         'outer: loop {
             if next_pipes.is_empty() {
+                max_steps = steps.iter().last().unwrap() / 2 + 1;
                 break 'outer;
+            }
+
+            // check for middle point
+            if next_pipes.len() >= 2 {
+                let unique_pipes =
+                    next_pipes
+                        .iter()
+                        .flatten()
+                        .map(|el| el.0)
+                        .fold(vec![], |mut acc, pipe| {
+                            if !acc.contains(&pipe.origin) {
+                                acc.push(pipe.origin);
+                            }
+                            acc
+                        });
+
+                if unique_pipes.len() <= 1 {
+                    let first = next_pipes.first().unwrap();
+                    max_steps = first.clone().unwrap().2;
+                    break 'outer;
+                }
             }
 
             // check and rebuild next_pipes Vec
@@ -165,7 +188,7 @@ impl Maze {
                 .collect::<Vec<_>>()
         }
 
-        steps.iter().max().unwrap() / 2 + 1
+        max_steps
     }
 }
 
