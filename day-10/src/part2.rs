@@ -1,6 +1,6 @@
-use std::{cell::RefCell, error::Error};
+use std::{cell::RefCell, collections::HashSet, error::Error};
 
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Ord, PartialOrd, PartialEq, Eq, Hash)]
 pub enum Direction {
     Down,
     Left,
@@ -9,13 +9,13 @@ pub enum Direction {
     Start,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Point {
     x: usize,
     y: usize,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Pipe {
     char: char,
     origin: Point,
@@ -200,6 +200,8 @@ impl Maze {
         let mut num_edges: u32 = 0;
         let mut verts = vec!['|', 'F', '7'];
         let start_char = self.start_override.borrow();
+        let path = self.path.borrow();
+        let path_set: HashSet<&Pipe> = HashSet::from_iter(path.iter());
 
         // include `S` only if it counts as one of the selected corners
         if verts.contains(&start_char) {
@@ -207,7 +209,7 @@ impl Maze {
         }
 
         for (i, pipe) in self.pipes.iter().enumerate() {
-            if self.path.borrow().contains(pipe) {
+            if path_set.contains(pipe) {
                 if verts.contains(&pipe.char) {
                     num_edges += 1;
                 }
